@@ -1,0 +1,141 @@
+{
+ "actions": [],
+ "autoname": "field:process_name",
+ "creation": "2017-09-22 11:17:18.544491",
+ "doctype": "DocType",
+ "document_type": "Document",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "section_break_1",
+  "process_name",
+  "department",
+  "process_type",
+  "column_break_4",
+  "workstation",
+  "costing_method",
+  "value_scrap",
+  "sb_materials",
+  "materials",
+  "sb_finished_products",
+  "finished_products",
+  "sb_scrap",
+  "scrap"
+ ],
+ "fields": [
+  {
+   "fieldname": "section_break_1",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "process_name",
+   "fieldtype": "Data",
+   "in_global_search": 1,
+   "in_list_view": 1,
+   "label": "Process Name",
+   "reqd": 1,
+   "unique": 1
+  },
+  {
+   "fieldname": "department",
+   "fieldtype": "Link",
+   "label": "Department",
+   "options": "Manufacturing Department"
+  },
+  {
+   "fieldname": "process_type",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Process Type",
+   "options": "Process Type"
+  },
+  {
+   "fieldname": "column_break_4",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "workstation",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "in_standard_filter": 1,
+   "label": "Workstation",
+   "options": "Workstation"
+  },
+  {
+   "fieldname": "costing_method",
+   "fieldtype": "Select",
+   "label": "Costing Method",
+   "options": "\nPhysical measurement\nRelative Sales Value",
+   "reqd": 1
+  },
+  {
+   "default": "0",
+   "fieldname": "value_scrap",
+   "fieldtype": "Check",
+   "label": "Include Scrap in Valuation"
+  },
+  {
+   "fieldname": "sb_materials",
+   "fieldtype": "Section Break",
+   "label": "Materials"
+  },
+  {
+   "fieldname": "materials",
+   "fieldtype": "Table",
+   "label": "Materials",
+   "options": "Process Item"
+  },
+  {
+   "fieldname": "sb_finished_products",
+   "fieldtype": "Section Break",
+   "label": "Finished Products"
+  },
+  {
+   "fieldname": "finished_products",
+   "fieldtype": "Table",
+   "label": "Finished Products",
+   "options": "Process Item"
+  },
+  {
+   "fieldname": "sb_scrap",
+   "fieldtype": "Section Break",
+   "label": "Scrap"
+  },
+  {
+   "fieldname": "scrap",
+   "fieldtype": "Table",
+   "label": "Scrap",
+   "options": "Process Item"
+  }
+ ],
+ "links": [],
+ "modified": "2022-06-06 19:33:35.716677",
+ "modified_by": "Administrator",
+ "module": "Process Manufacturing",
+ "name": "Process Definition",
+ "name_case": "Title Case",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "restrict_to_domain": "Manufacturing",
+ "search_fields": "process_name, process_type, workstation",
+ "show_name_in_global_search": 1,
+ "sort_field": "modified",
+ "sort_order": "DESC",
+ "title_field": "process_name",
+ "track_changes": 1,
+ "track_seen": 1
+}
