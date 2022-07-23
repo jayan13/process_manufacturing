@@ -54,7 +54,7 @@ class ProcessOrder(Document):
 		#set source and target warehouse
 		se.from_warehouse = self.src_warehouse
 		se.to_warehouse = self.wip_warehouse
-		se.stock_entry_type='Material Issue'
+		se.stock_entry_type='Material Transfer for Manufacture'
 		for item in self.materials:
 			if self.src_warehouse:
 				src_wh = self.src_warehouse
