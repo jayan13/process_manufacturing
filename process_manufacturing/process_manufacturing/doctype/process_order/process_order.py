@@ -127,9 +127,11 @@ class ProcessOrder(Document):
 		#add Stock Entry Items for produced goods and scrap
 		for item in self.finished_products:
 			wareh=item.warehouse or se.to_warehouse
+			
 			se = self.set_se_items(se, item, None, wareh, True, qty_of_total_production, total_sale_value, production_cost)
 
 		for item in self.scrap:
+			
 			if value_scrap:
 				se = self.set_se_items(se, item, None, self.scrap_warehouse, True, qty_of_total_production, total_sale_value, production_cost)
 			else:
@@ -163,6 +165,10 @@ class ProcessOrder(Document):
 			se_item.description = description
 			se_item.uom = stock_uom
 			se_item.stock_uom = stock_uom
+			if item.parentfield=='finished_products':
+				se_item.is_finished_item='1'
+			if item.parentfield=='scrap':
+				se_item.is_scrap_item='1'
 
 			se_item.expense_account = item_expense_account or expense_account
 			se_item.cost_center = item_cost_center or cost_center
