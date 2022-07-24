@@ -5,7 +5,7 @@
 from __future__ import unicode_literals
 import frappe
 from frappe.model.document import Document
-from frappe.utils import get_datetime, time_diff_in_hours
+from frappe.utils import get_datetime, time_diff_in_hours, add_to_date
 from frappe import _
 
 class ProcessOrder(Document):
@@ -42,9 +42,14 @@ class ProcessOrder(Document):
 
 	@frappe.whitelist()
 	def start_finish_processing(self, status):
+		enddt=''
+		if self.operation_hours > 0:
+			enddt=add_to_date(self.start_dt, hours=self.operation_hours,as_datetime=True)
+			self.end_dt=enddt
+			
 		if status == "In Process":
 			if not self.end_dt:
-				self.end_dt = get_datetime()
+				self.end_dt = enddt or get_datetime()
 		self.flags.ignore_validate_update_after_submit = True
 		self.save()
 		return self.make_stock_entry(status)
@@ -235,7 +240,9 @@ def manage_se_submit(se, po):
 		frappe.throw(_("Submit the  Process Order {0} to make Stock Entries").format(po.name))
 	if po.status == "Submitted":
 		po.status = "In Process"
-		po.start_dt = get_datetime()
+		sstenty=frappe.get_doc("Stock Entry",{"process_order": po.name, "docstatus": '1'})
+		dt=str(sstenty.posting_date)+" "+str(sstenty.posting_time)
+		po.start_dt = get_datetime(dt)
 	elif po.status == "In Process":
 		po.status = "Completed"
 	elif po.status in ["Completed", "Cancelled"]:
