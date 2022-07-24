@@ -26,7 +26,7 @@ frappe.ui.form.on('Process Order', {
 		if(!frm.doc.__islocal && frm.doc.status == 'In Process'){
 			var finish_btn = frm.add_custom_button(__('Complete'), function(){
 				prompt_for_qty(frm, "finished_products", "Enter Produced Quantity", true, function () {
-					if(frm.doc.scrap){
+					if(frm.doc.scrap.length > 0){
 							prompt_for_qty(frm, "scrap", "Enter Scrap Quantity", false, function() {
 								prompt_for_hours(frm, function() {
 									process_production(frm, "In Process");

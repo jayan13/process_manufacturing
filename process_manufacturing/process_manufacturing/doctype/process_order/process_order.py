@@ -61,8 +61,9 @@ class ProcessOrder(Document):
 			else:
 				src_wh = frappe.db.get_value("Item Default", {'parent': item.item, 'company': self.company},\
 					["default_warehouse"])
+			wareh=item.warehouse or src_wh
 			#create stock entry lines
-			se = self.set_se_items(se, item, src_wh, self.wip_warehouse, False)
+			se = self.set_se_items(se, item, wareh, self.wip_warehouse, False)
 
 		return se
 
@@ -131,11 +132,11 @@ class ProcessOrder(Document):
 			se = self.set_se_items(se, item, None, wareh, True, qty_of_total_production, total_sale_value, production_cost)
 
 		for item in self.scrap:
-			
+			wareh=item.warehouse or self.scrap_warehouse
 			if value_scrap:
-				se = self.set_se_items(se, item, None, self.scrap_warehouse, True, qty_of_total_production, total_sale_value, production_cost)
+				se = self.set_se_items(se, item, None, wareh, True, qty_of_total_production, total_sale_value, production_cost)
 			else:
-				se = self.set_se_items(se, item, None, self.scrap_warehouse, False)
+				se = self.set_se_items(se, item, None, wareh, False)
 
 		return se
 		
