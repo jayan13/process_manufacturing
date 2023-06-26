@@ -147,10 +147,11 @@ class ProcessOrder(Document):
 		
 	@frappe.whitelist()
 	def set_se_items(self, se, item, s_wh, t_wh, calc_basic_rate=False, qty_of_total_production=None, total_sale_value=None, production_cost=None):
+		
 		if item.quantity > 0:
 			expense_account, cost_center = frappe.db.get_values("Company", self.company,["default_expense_account", "cost_center"])[0]
 			item_name, stock_uom, description = frappe.db.get_values("Item", item.item,["item_name", "stock_uom", "description"])[0]
-			item_expense_account=''
+			item_expense_account=item.expense_account
 			item_cost_center=''
 			item_def=frappe.db.get_value("Item Default", {'parent': item.item, 'company': self.company},["expense_account", "buying_cost_center"],as_dict=1)
 			if item_def:
@@ -166,7 +167,7 @@ class ProcessOrder(Document):
 			se_item.item_code = item.item
 			se_item.qty = item.quantity
 			se_item.s_warehouse = s_wh
-			se_item.t_warehouse = t_wh
+			se_item.t_warehouse = t_wh			
 			se_item.item_name = item_name
 			se_item.description = description
 			se_item.uom = stock_uom
@@ -175,17 +176,18 @@ class ProcessOrder(Document):
 				se_item.is_finished_item='1'
 			if item.parentfield=='scrap':
 				se_item.is_scrap_item='1'
-			se_item.expense_account = item_expense_account or expense_account
+			se_item.expense_account = item.expense_account or item_expense_account or expense_account
 			se_item.cost_center = item_cost_center or cost_center
-
+			
 			# in stock uom
+			
 			se_item.transfer_qty = item.quantity
 			se_item.conversion_factor = 1.00
 
 			item_details = se.run_method( "get_item_details",args = (frappe._dict(
 			{"item_code": item.item, "company": self.company, "uom": stock_uom, 's_warehouse': s_wh})), for_update=True)
 
-			for f in ("uom", "stock_uom", "description", "item_name", "expense_account",
+			for f in ("uom", "stock_uom", "description", "item_name", 
 			"cost_center", "conversion_factor"):
 				se_item.set(f, item_details.get(f))
 
@@ -195,6 +197,7 @@ class ProcessOrder(Document):
 				elif self.costing_method == "Relative Sales Value":
 					sale_value_of_pdt = frappe.db.get_value("Item Price", {"item_code":item.item}, "price_list_rate")
 					se_item.basic_rate = (float(sale_value_of_pdt) * float(production_cost)) / float(total_sale_value)
+		
 		return se
 
 	def make_stock_entry(self, status):
@@ -217,6 +220,7 @@ class ProcessOrder(Document):
 			po_item.item = item.item
 			po_item.item_name = item.item_name
 			po_item.warehouse = item.warehouse
+			po_item.expense_account = item.expense_account
 
 def validate_items(se_items, po_items):
 	#validate for items not in process order

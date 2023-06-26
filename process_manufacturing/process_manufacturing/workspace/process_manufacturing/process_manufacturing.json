@@ -13,7 +13,7 @@
  "is_standard": 1,
  "label": "Process Manufacturing",
  "links": [],
- "modified": "2022-06-06 18:46:00.825304",
+ "modified": "2023-06-26 09:33:39.829187",
  "modified_by": "Administrator",
  "module": "Process Manufacturing",
  "name": "Process Manufacturing",
@@ -43,6 +43,12 @@
    "doc_view": "",
    "label": "Process Type",
    "link_to": "Process Type",
+   "type": "DocType"
+  },
+  {
+   "doc_view": "",
+   "label": "Oil Lab Test",
+   "link_to": "Oil Lab Test",
    "type": "DocType"
   }
  ],

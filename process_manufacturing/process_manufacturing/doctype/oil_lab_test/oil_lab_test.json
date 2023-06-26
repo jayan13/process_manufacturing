@@ -1,13 +1,13 @@
 {
  "actions": [],
  "allow_rename": 1,
- "autoname": "format:LTR-{ltr_no}",
+ "autoname": "naming_series: -",
  "creation": "2023-06-25 11:29:06.286925",
  "doctype": "DocType",
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "ltr_no",
+  "naming_series",
   "density_per_sg",
   "flash_point",
   "water_contant",
@@ -17,13 +17,6 @@
   "qty_in_litters"
  ],
  "fields": [
-  {
-   "fieldname": "ltr_no",
-   "fieldtype": "Data",
-   "in_list_view": 1,
-   "label": "LTR No",
-   "reqd": 1
-  },
   {
    "description": "ASTM Test Method -D4052",
    "fieldname": "density_per_sg",
@@ -67,13 +60,19 @@
   {
    "fieldname": "qty_in_litters",
    "fieldtype": "Float",
-   "label": "Qty In Litters",
-   "reqd": 1
+   "label": "Qty In Litters"
+  },
+  {
+   "fieldname": "naming_series",
+   "fieldtype": "Select",
+   "hidden": 1,
+   "label": "naming series",
+   "options": "LTR-"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-06-25 11:57:03.535469",
+ "modified": "2023-06-26 11:15:15.156889",
  "modified_by": "Administrator",
  "module": "Process Manufacturing",
  "name": "Oil Lab Test",
