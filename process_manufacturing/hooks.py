@@ -17,9 +17,15 @@ doc_events = {
  	"Stock Entry": {
         "on_submit": "process_manufacturing.process_manufacturing.doctype.process_order.process_order.manage_se_changes",
         "on_cancel": "process_manufacturing.process_manufacturing.doctype.process_order.process_order.manage_se_changes"
+    },
+    "Purchase Receipt": {
+        "on_update":"process_manufacturing.process_manufacturing.doctype.oil_lab_test.oil_lab_test.update_test_purchase"
+    },
+    "Delivery Note": {
+        "on_update":"process_manufacturing.process_manufacturing.doctype.oil_lab_test.oil_lab_test.update_test_delivary"
     }
 }
-# Includes in <head>
+# Includes in <head> on_update
 # ------------------
 
 # include js, css files in header of desk.html

@@ -8,13 +8,15 @@
  "engine": "InnoDB",
  "field_order": [
   "naming_series",
-  "density_per_sg",
-  "flash_point",
-  "water_contant",
+  "referance_type",
+  "voucher_no",
+  "party_type",
+  "party",
   "column_break_5",
   "tickect_no",
-  "net_weight",
-  "qty_in_litters"
+  "density_per_sg",
+  "flash_point",
+  "water_contant"
  ],
  "fields": [
   {
@@ -22,24 +24,21 @@
    "fieldname": "density_per_sg",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Density Per SG",
-   "reqd": 1
+   "label": "Density Per SG"
   },
   {
    "description": "ASTM Test Method - D92",
    "fieldname": "flash_point",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Flash Point",
-   "reqd": 1
+   "label": "Flash Point"
   },
   {
    "description": "ASTM Test Method - Hydroscout",
    "fieldname": "water_contant",
    "fieldtype": "Float",
    "in_list_view": 1,
-   "label": "Water Contant",
-   "reqd": 1
+   "label": "Water Contant"
   },
   {
    "fieldname": "column_break_5",
@@ -52,27 +51,44 @@
    "reqd": 1
   },
   {
-   "fieldname": "net_weight",
-   "fieldtype": "Float",
-   "label": "Net Weight",
-   "reqd": 1
-  },
-  {
-   "fieldname": "qty_in_litters",
-   "fieldtype": "Float",
-   "label": "Qty In Litters"
-  },
-  {
    "fieldname": "naming_series",
    "fieldtype": "Select",
    "hidden": 1,
    "label": "naming series",
    "options": "LTR-"
+  },
+  {
+   "fieldname": "referance_type",
+   "fieldtype": "Select",
+   "label": "Referance Type",
+   "options": "Purchase Receipt\nDelivery Note",
+   "reqd": 1
+  },
+  {
+   "fieldname": "voucher_no",
+   "fieldtype": "Dynamic Link",
+   "label": "Voucher No",
+   "options": "referance_type",
+   "reqd": 1
+  },
+  {
+   "fieldname": "party_type",
+   "fieldtype": "Select",
+   "label": "Party Type",
+   "options": "Supplier\nCustomer",
+   "reqd": 1
+  },
+  {
+   "fieldname": "party",
+   "fieldtype": "Dynamic Link",
+   "label": "Party",
+   "options": "party_type",
+   "reqd": 1
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2023-06-26 11:15:15.156889",
+ "modified": "2023-06-27 22:27:49.724053",
  "modified_by": "Administrator",
  "module": "Process Manufacturing",
  "name": "Oil Lab Test",
@@ -91,7 +107,6 @@
    "write": 1
   }
  ],
- "quick_entry": 1,
  "sort_field": "modified",
  "sort_order": "DESC"
 }
