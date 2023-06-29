@@ -37,7 +37,7 @@ class OilLabTest(Document):
 def update_test_purchase(doc, method):
 	if doc.company=='Dure Oil Middle East Factory - Sole Proprietorship LLC':
 		lbrest=frappe.db.get_value('Oil Lab Test',{'voucher_no':doc.name,'referance_type':'Purchase Receipt'},'name')
-		if doc.docstatus=='0':
+		if not doc.docstatus:
 			if lbrest:
 				tdoc=frappe.get_doc("Oil Lab Test", lbrest)
 				tdoc.tickect_no=doc.tickect_no			
@@ -60,7 +60,7 @@ def update_test_purchase(doc, method):
 def update_test_delivary(doc, method):
 	if doc.company=='Dure Oil Middle East Factory - Sole Proprietorship LLC':
 		lbrest=frappe.db.get_value('Oil Lab Test',{'voucher_no':doc.name,'referance_type':'Delivery Note'},'name')
-		if doc.docstatus=='0':
+		if not doc.docstatus:
 			if lbrest:
 				tdoc=frappe.get_doc("Oil Lab Test", lbrest)
 				tdoc.tickect_no=doc.tickect_no			
