@@ -1,0 +1,57 @@
+{
+ "actions": [],
+ "allow_rename": 1,
+ "creation": "2023-06-29 13:56:51.042802",
+ "doctype": "DocType",
+ "editable_grid": 1,
+ "engine": "InnoDB",
+ "field_order": [
+  "company",
+  "lab_test_creation_notification_receivers",
+  "lab_test_update_notification_receivers"
+ ],
+ "fields": [
+  {
+   "fieldname": "company",
+   "fieldtype": "Link",
+   "in_list_view": 1,
+   "label": "Company",
+   "options": "Company"
+  },
+  {
+   "fieldname": "lab_test_creation_notification_receivers",
+   "fieldtype": "Table MultiSelect",
+   "label": "Lab Test Creation Notification Receivers",
+   "options": "Lab Notification Receivers"
+  },
+  {
+   "fieldname": "lab_test_update_notification_receivers",
+   "fieldtype": "Table MultiSelect",
+   "label": "Lab Test Update Notification Receivers",
+   "options": "Lab Notification Receivers"
+  }
+ ],
+ "index_web_pages_for_search": 1,
+ "links": [],
+ "modified": "2023-06-29 13:56:51.042802",
+ "modified_by": "Administrator",
+ "module": "Process Manufacturing",
+ "name": "Lab Test Notification Receivers",
+ "owner": "Administrator",
+ "permissions": [
+  {
+   "create": 1,
+   "delete": 1,
+   "email": 1,
+   "export": 1,
+   "print": 1,
+   "read": 1,
+   "report": 1,
+   "role": "System Manager",
+   "share": 1,
+   "write": 1
+  }
+ ],
+ "sort_field": "modified",
+ "sort_order": "DESC"
+}
