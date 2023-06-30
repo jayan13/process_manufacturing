@@ -17,6 +17,9 @@ class OilLabTest(Document):
 					if net_weight and density_per_sg:
 						qty_in_litters=float(net_weight)/float(density_per_sg)
 						frappe.db.set_value('Purchase Receipt',self.voucher_no,{'density_per_sg':density_per_sg,'flash_point':flash_point,'water_contant':water_contant,'qty_in_litters':qty_in_litters})
+						item=frappe.db.get_value("Purchase Receipt Item",{'parent':self.voucher_no},['name','rate'], as_dict=1)
+						if item:
+							frappe.db.set_value('Purchase Receipt Item',item.name,{'qty':qty_in_litters})
 						send_notification_to_user(self)
 				else:
 					frappe.throw("You cannot update Test report, Purchase Receipt is already submitted")
@@ -31,6 +34,9 @@ class OilLabTest(Document):
 					if net_weight and density_per_sg:
 						qty_in_litters=float(net_weight)/float(density_per_sg)				
 						frappe.db.set_value('Delivery Note',self.voucher_no,{'density_per_sg':density_per_sg,'flash_point':flash_point,'water_contant':water_contant,'qty_in_litters':qty_in_litters})
+						item=frappe.db.get_value("Delivery Note Item",{'parent':self.voucher_no},['name','rate'], as_dict=1)
+						if item:
+							frappe.db.set_value('Delivery Note Item',item.name,{'qty':qty_in_litters})
 						send_notification_to_user(self)
 				else:
 					frappe.throw("You cannot update Test report, Delivery Note is already submitted")
