@@ -88,7 +88,7 @@ def update_test_delivary(doc, method):
 			if not doc.docstatus and doc.tickect_no:
 				if lbrest:
 					tdoc=frappe.get_doc("Oil Lab Test", lbrest)
-					if doc.customer!=tdoc.customer or tdoc.tickect_no!=doc.tickect_no:
+					if doc.customer!=tdoc.party or tdoc.tickect_no!=doc.tickect_no:
 						tdoc.tickect_no=doc.tickect_no
 						tdoc.party=doc.customer
 						tdoc.save()
