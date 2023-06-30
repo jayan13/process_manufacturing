@@ -17,10 +17,11 @@ class OilLabTest(Document):
 					if net_weight and density_per_sg:
 						qty_in_litters=float(net_weight)/float(density_per_sg)
 						frappe.db.set_value('Purchase Receipt',self.voucher_no,{'density_per_sg':density_per_sg,'flash_point':flash_point,'water_contant':water_contant,'qty_in_litters':qty_in_litters})
-						item=frappe.db.get_value("Purchase Receipt Item",{'parent':self.voucher_no},['name','rate'], as_dict=1)
+						item=frappe.db.get_value("Purchase Receipt Item",{'parent':self.voucher_no},['name','rate','qty'], as_dict=1)
 						if item:
-							frappe.db.set_value('Purchase Receipt Item',item.name,{'qty':qty_in_litters})
-						send_notification_to_user(self)
+							if item.qty!=qty_in_litters:
+								frappe.db.set_value('Purchase Receipt Item',item.name,{'qty':qty_in_litters,'received_qty':qty_in_litters})
+								send_notification_to_user(self)
 				else:
 					frappe.throw("You cannot update Test report, Purchase Receipt is already submitted")
 		else:
@@ -34,10 +35,11 @@ class OilLabTest(Document):
 					if net_weight and density_per_sg:
 						qty_in_litters=float(net_weight)/float(density_per_sg)				
 						frappe.db.set_value('Delivery Note',self.voucher_no,{'density_per_sg':density_per_sg,'flash_point':flash_point,'water_contant':water_contant,'qty_in_litters':qty_in_litters})
-						item=frappe.db.get_value("Delivery Note Item",{'parent':self.voucher_no},['name','rate'], as_dict=1)
+						item=frappe.db.get_value("Delivery Note Item",{'parent':self.voucher_no},['name','rate','qty'], as_dict=1)
 						if item:
-							frappe.db.set_value('Delivery Note Item',item.name,{'qty':qty_in_litters})
-						send_notification_to_user(self)
+							if item.qty!=qty_in_litters:
+								frappe.db.set_value('Delivery Note Item',item.name,{'qty':qty_in_litters})
+								send_notification_to_user(self)
 				else:
 					frappe.throw("You cannot update Test report, Delivery Note is already submitted")
 
@@ -48,10 +50,10 @@ def update_test_purchase(doc, method):
 		if not doc.docstatus and doc.tickect_no:
 			if lbrest:
 				tdoc=frappe.get_doc("Oil Lab Test", lbrest)
-				tdoc.tickect_no=doc.tickect_no			
-				tdoc.party_type='Supplier'
-				tdoc.party=doc.supplier
-				tdoc.save()
+				if doc.supplier!=tdoc.party or tdoc.tickect_no!=doc.tickect_no:
+					tdoc.tickect_no=doc.tickect_no	
+					tdoc.party=doc.supplier
+					tdoc.save()
 			else:
 				tdoc=frappe.new_doc("Oil Lab Test")
 				tdoc.tickect_no=doc.tickect_no
@@ -72,10 +74,10 @@ def update_test_delivary(doc, method):
 		if not doc.docstatus and doc.tickect_no:
 			if lbrest:
 				tdoc=frappe.get_doc("Oil Lab Test", lbrest)
-				tdoc.tickect_no=doc.tickect_no			
-				tdoc.party_type='Customer'
-				tdoc.party=doc.customer
-				tdoc.save()
+				if doc.customer!=tdoc.customer or tdoc.tickect_no!=doc.tickect_no:
+					tdoc.tickect_no=doc.tickect_no
+					tdoc.party=doc.customer
+					tdoc.save()
 				
 			else:
 				tdoc=frappe.new_doc("Oil Lab Test")
