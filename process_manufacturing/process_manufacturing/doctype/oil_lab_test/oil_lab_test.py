@@ -45,16 +45,30 @@ class OilLabTest(Document):
 
 @frappe.whitelist()
 def update_test_purchase(doc, method):
-	if doc.company=='Dure Oil Middle East Factory - Sole Proprietorship LLC':
-		lbrest=frappe.db.get_value('Oil Lab Test',{'voucher_no':doc.name,'referance_type':'Purchase Receipt'},'name')
-		if not doc.docstatus and doc.tickect_no:
-			if lbrest:
-				tdoc=frappe.get_doc("Oil Lab Test", lbrest)
-				if doc.supplier!=tdoc.party or tdoc.tickect_no!=doc.tickect_no:
-					tdoc.tickect_no=doc.tickect_no	
+	
+	if method=='on_update':
+		if doc.company=='Dure Oil Middle East Factory - Sole Proprietorship LLC':
+			lbrest=frappe.db.get_value('Oil Lab Test',{'voucher_no':doc.name,'referance_type':'Purchase Receipt'},'name')
+			if not doc.docstatus and doc.tickect_no:
+				if lbrest:
+					tdoc=frappe.get_doc("Oil Lab Test", lbrest)
+					if doc.supplier!=tdoc.party or tdoc.tickect_no!=doc.tickect_no:
+						tdoc.tickect_no=doc.tickect_no	
+						tdoc.party=doc.supplier
+						tdoc.save()
+				else:
+					tdoc=frappe.new_doc("Oil Lab Test")
+					tdoc.tickect_no=doc.tickect_no
+					tdoc.referance_type='Purchase Receipt'
+					tdoc.voucher_no=doc.name
+					tdoc.party_type='Supplier'
 					tdoc.party=doc.supplier
 					tdoc.save()
-			else:
+					frappe.db.set_value('Purchase Receipt',doc.name,{'ltr_no':tdoc.name})
+					send_notification_to_lab(tdoc)
+	else:
+		if doc.company=='Dure Oil Middle East Factory - Sole Proprietorship LLC':
+			if doc.tickect_no:
 				tdoc=frappe.new_doc("Oil Lab Test")
 				tdoc.tickect_no=doc.tickect_no
 				tdoc.referance_type='Purchase Receipt'
@@ -64,22 +78,34 @@ def update_test_purchase(doc, method):
 				tdoc.save()
 				frappe.db.set_value('Purchase Receipt',doc.name,{'ltr_no':tdoc.name})
 				send_notification_to_lab(tdoc)
-
 		
 
 @frappe.whitelist()
 def update_test_delivary(doc, method):
-	if doc.company=='Dure Oil Middle East Factory - Sole Proprietorship LLC':
-		lbrest=frappe.db.get_value('Oil Lab Test',{'voucher_no':doc.name,'referance_type':'Delivery Note'},'name')
-		if not doc.docstatus and doc.tickect_no:
-			if lbrest:
-				tdoc=frappe.get_doc("Oil Lab Test", lbrest)
-				if doc.customer!=tdoc.customer or tdoc.tickect_no!=doc.tickect_no:
+	if method=='on_update':
+		if doc.company=='Dure Oil Middle East Factory - Sole Proprietorship LLC':
+			lbrest=frappe.db.get_value('Oil Lab Test',{'voucher_no':doc.name,'referance_type':'Delivery Note'},'name')
+			if not doc.docstatus and doc.tickect_no:
+				if lbrest:
+					tdoc=frappe.get_doc("Oil Lab Test", lbrest)
+					if doc.customer!=tdoc.customer or tdoc.tickect_no!=doc.tickect_no:
+						tdoc.tickect_no=doc.tickect_no
+						tdoc.party=doc.customer
+						tdoc.save()
+					
+				else:
+					tdoc=frappe.new_doc("Oil Lab Test")
 					tdoc.tickect_no=doc.tickect_no
+					tdoc.referance_type='Delivery Note'
+					tdoc.voucher_no=doc.name
+					tdoc.party_type='Customer'
 					tdoc.party=doc.customer
 					tdoc.save()
-				
-			else:
+					frappe.db.set_value('Delivery Note',doc.name,{'ltr_no':tdoc.name})
+					send_notification_to_lab(tdoc)
+	else:
+		if doc.company=='Dure Oil Middle East Factory - Sole Proprietorship LLC':
+			if doc.tickect_no:
 				tdoc=frappe.new_doc("Oil Lab Test")
 				tdoc.tickect_no=doc.tickect_no
 				tdoc.referance_type='Delivery Note'
@@ -89,7 +115,6 @@ def update_test_delivary(doc, method):
 				tdoc.save()
 				frappe.db.set_value('Delivery Note',doc.name,{'ltr_no':tdoc.name})
 				send_notification_to_lab(tdoc)
-
 
 @frappe.whitelist()
 def send_notification_to_lab(lab_test): 
