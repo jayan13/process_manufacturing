@@ -115,6 +115,21 @@ def update_test_delivary(doc, method):
 				tdoc.save()
 				frappe.db.set_value('Delivery Note',doc.name,{'ltr_no':tdoc.name})
 				send_notification_to_lab(tdoc)
+@frappe.whitelist()
+def delete_test_purchase(doc, method):
+	if doc.company=='Dure Oil Middle East Factory - Sole Proprietorship LLC':
+		lbrest=frappe.db.get_value('Oil Lab Test',{'voucher_no':doc.name,'referance_type':'Purchase Receipt'},'name')
+		if lbrest:
+			tdoc=frappe.get_doc("Oil Lab Test", lbrest)
+			tdoc.delete()
+
+@frappe.whitelist()
+def delete_test_delivary(doc, method):
+	if doc.company=='Dure Oil Middle East Factory - Sole Proprietorship LLC':
+		lbrest=frappe.db.get_value('Oil Lab Test',{'voucher_no':doc.name,'referance_type':'Delivery Note'},'name')
+		if lbrest:
+			tdoc=frappe.get_doc("Oil Lab Test", lbrest)
+			tdoc.delete()
 
 @frappe.whitelist()
 def send_notification_to_lab(lab_test): 
