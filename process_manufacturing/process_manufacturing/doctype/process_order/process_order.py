@@ -83,12 +83,14 @@ class ProcessOrder(Document):
 		#TODO allow multiple raw material transfer
 		raw_material_cost = 0
 		operating_cost = 0
+		#expense_account=frappe.db.get_value('Company',self.company,'stock_adjustment_account')
 		if se_materials:
 			raw_material_cost = se_materials.total_incoming_value
 			se.items = se_materials.items
 			for item in se.items:
 				item.s_warehouse = se.from_warehouse
 				item.t_warehouse = None
+				#item.expense_account=expense_account
 		else:
 			for item in self.materials:
 				se = self.set_se_items(se, item, se.from_warehouse, None, False)
@@ -156,6 +158,10 @@ class ProcessOrder(Document):
 			if item_def:
 				item_expense_account=item_def.expense_account
 				item_cost_center=item_def.buying_cost_center
+			
+			if se.stock_entry_type=='Manufacture':
+				item_expense_account=frappe.db.get_value('Company',self.company,'stock_adjustment_account')
+			
 			if not expense_account and not item_expense_account:
 				frappe.throw(_("Please update default Default Cost of Goods Sold Account for company {0}").format(self.company))
 
@@ -175,7 +181,7 @@ class ProcessOrder(Document):
 				se_item.is_finished_item='1'
 			if item.parentfield=='scrap':
 				se_item.is_scrap_item='1'
-			se_item.expense_account = item_expense_account or expense_account
+			se_item.expense_account = item.expense_account or item_expense_account or expense_account
 			se_item.cost_center = item_cost_center or cost_center
 
 			# in stock uom
@@ -185,7 +191,7 @@ class ProcessOrder(Document):
 			item_details = se.run_method( "get_item_details",args = (frappe._dict(
 			{"item_code": item.item, "company": self.company, "uom": stock_uom, 's_warehouse': s_wh})), for_update=True)
 
-			for f in ("uom", "stock_uom", "description", "item_name", "expense_account",
+			for f in ("uom", "stock_uom", "description", "item_name", 
 			"cost_center", "conversion_factor"):
 				se_item.set(f, item_details.get(f))
 
@@ -217,6 +223,7 @@ class ProcessOrder(Document):
 			po_item.item = item.item
 			po_item.item_name = item.item_name
 			po_item.warehouse = item.warehouse
+			po_item.expense_account = item.expense_account
 
 def validate_items(se_items, po_items):
 	#validate for items not in process order
