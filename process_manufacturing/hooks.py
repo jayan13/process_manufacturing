@@ -11,6 +11,15 @@ app_color = "grey"
 app_email = "info@earthianslive.com"
 app_license = "MIT"
 
+# DocType Class
+# ---------------
+# Override standard doctype classes
+
+override_doctype_class = {
+	"Stock Entry": "process_manufacturing.overrides.stock_entry.CustomStockEntry",
+ }
+
+
 fixtures = [{"dt":"Custom Field", "filters": [["fieldname", "in", ("process_order", "department")]]}]
 
 doc_events = {
